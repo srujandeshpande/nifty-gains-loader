@@ -1,6 +1,8 @@
-import requests
+from nsetools import Nse
 import pytz
 from datetime import datetime
+
+nse = Nse()
 
 with open('holidays.txt') as f:
     holidays = f.readlines()
@@ -11,13 +13,15 @@ curr = datetime.now(ist).strftime("%Y-%m-%d")
 #Checking if it is a holiday
 for i in holidays:
     if(i[:-1] == curr):
-        pass
-    else:
         exit()
 
-nifty50_url = 'https://www.nseindia.com/api/equity-stockIndices?csv=true&index=NIFTY%2050'
+with open('nifty50.txt') as f:
+    nifty50 = f.readlines()
 
-nifty50_data = requests.get(nifty50_url)
-open('nifty50_data.csv', 'wb').write(nifty50_data.content)
+for j in nifty50:
+    ticker = j.strip()
+    quote = nse.get_quote(ticker)
+    print(quote['pChange'])
 
-
+quote = nse.get_index_quote('NIFTY 50')
+print(quote)

@@ -6,8 +6,8 @@ authors = ["Srujan Deshpande <srujan.deshpande@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
-requests = "^2.25.1"
 pytz = "^2020.5"
+nsetools = "^1.0.11"
 
 [tool.poetry.dev-dependencies]
 
