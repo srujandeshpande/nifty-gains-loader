@@ -1,6 +1,9 @@
 from nsetools import Nse
 import pytz
 from datetime import datetime
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
 
 nse = Nse()
 
@@ -25,3 +28,10 @@ for j in nifty50:
 
 quote = nse.get_index_quote('NIFTY 50')
 print(quote)
+
+
+cred = credentials.Certificate('./firestore-access.json')
+firebase_admin.initialize_app(cred)
+
+db = firestore.client()
+
