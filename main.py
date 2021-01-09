@@ -7,31 +7,51 @@ from firebase_admin import firestore
 
 nse = Nse()
 
-with open('holidays.txt') as f:
+with open("holidays.txt") as f:
     holidays = f.readlines()
 
 ist = pytz.timezone("Asia/Calcutta")
-curr = datetime.now(ist).strftime("%Y-%m-%d")
+today = datetime.now(ist)
+curr = today.strftime("%Y-%m-%d")
 
-#Checking if it is a holiday
+# Checking if it is a holiday
 for i in holidays:
-    if(i[:-1] == curr):
+    if i[:-1] == curr:
+        print("Holiday")
         exit()
+# Checking if it is a weekend
+if today.weekday() in [5, 6]:
+    print("Weekend")
+    exit()
 
-with open('nifty50.txt') as f:
+
+# Firestore
+cred = credentials.Certificate("./firestore-access.json")
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+
+
+# Individual Quotes
+with open("nifty50.txt") as f:
     nifty50 = f.readlines()
 
+# Nifty Quote
 for j in nifty50:
     ticker = j.strip()
     quote = nse.get_quote(ticker)
-    print(quote['pChange'])
+    data = {
+        "open": quote["open"],
+        "close": quote["close"],
+        "pChange": quote["pChange"],
+        "date": curr,
+    }
+    db.collection(ticker).document(curr).set(data)
 
-quote = nse.get_index_quote('NIFTY 50')
-print(quote)
-
-
-cred = credentials.Certificate('./firestore-access.json')
-firebase_admin.initialize_app(cred)
-
-db = firestore.client()
-
+quote = nse.get_index_quote("NIFTY 50")
+data = {
+    "open": quote["open"],
+    "close": quote["close"],
+    "pChange": quote["pChange"],
+    "date": curr,
+}
+db.collection("NIFTY50").document(curr).set(data)
