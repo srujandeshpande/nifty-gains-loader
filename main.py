@@ -41,7 +41,7 @@ for j in nifty50:
     quote = nse.get_quote(ticker)
     data = {
         "open": quote["open"],
-        "close": quote["close"],
+        "close": quote["closePrice"],
         "pChange": quote["pChange"],
         "date": curr,
     }
@@ -49,8 +49,8 @@ for j in nifty50:
 
 quote = nse.get_index_quote("NIFTY 50")
 data = {
-    "open": quote["open"],
-    "close": quote["close"],
+    "lastPrice": quote["lastPrice"],
+    "change": quote["change"],
     "pChange": quote["pChange"],
     "date": curr,
 }
