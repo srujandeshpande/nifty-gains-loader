@@ -35,6 +35,25 @@ db = firestore.client()
 with open("nifty50.txt") as f:
     nifty50 = f.readlines()
 
+doc = db.collection("meta").document("dates").get()
+if doc.exists:
+    data = doc.to_dict()
+    if len(data["dates"] < 5):
+        data["dates"][len(data["dates"])] = curr
+    else:
+        drop = data["dates"][0]
+        for i in range(4):
+            data["dates"][i] = data["dates"][i + 1]
+        data["dates"][4] = curr
+        for k in nifty50:
+            ticker = k.strip()
+            db.collection(ticker).document(drop).delete()
+        db.collection("NIFTY50").document(drop).delete()
+else:
+    data = {"dates": [curr]}
+db.collection("meta").document("dates").set(data)
+
+
 # Nifty Quote
 for j in nifty50:
     ticker = j.strip()
