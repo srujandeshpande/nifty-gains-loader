@@ -10,7 +10,7 @@ path = sys.argv[0][:-7]
 
 nse = Nse()
 
-with open(path+"holidays.txt") as f:
+with open(path + "holidays.txt") as f:
     holidays = f.readlines()
 
 ist = pytz.timezone("Asia/Calcutta")
@@ -29,13 +29,13 @@ if today.weekday() in [5, 6]:
 
 
 # Firestore
-cred = credentials.Certificate(path+"firestore-access.json")
+cred = credentials.Certificate(path + "firestore-access.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 
 # Individual Quotes
-with open(path+"nifty50.txt") as f:
+with open(path + "nifty50.txt") as f:
     nifty50 = f.readlines()
 
 doc = db.collection("meta").document("dates").get()
