@@ -41,8 +41,8 @@ with open(path + "nifty50.txt") as f:
 doc = db.collection("meta").document("dates").get()
 if doc.exists:
     data = doc.to_dict()
-    if len(data["dates"] < 5):
-        data["dates"][len(data["dates"])] = curr
+    if len(data["dates"]) < 5:
+        data["dates"].append(curr)
     else:
         drop = data["dates"][0]
         for i in range(4):
