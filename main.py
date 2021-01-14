@@ -42,6 +42,8 @@ doc = db.collection("meta").document("dates").get()
 if doc.exists:
     data = doc.to_dict()
     if len(data["dates"]) < 5:
+        if curr in data["dates"]:
+            exit()
         data["dates"].append(curr)
     else:
         drop = data["dates"][0]
