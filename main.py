@@ -22,10 +22,8 @@ total = 500
 def progress(count, total, status=""):
     bar_len = 60
     filled_len = int(round(bar_len * count / float(total)))
-
     percents = round(100.0 * count / float(total), 1)
     bar = "=" * filled_len + "-" * (bar_len - filled_len)
-
     sys.stdout.write("[%s] %s%s ...%s\r" % (bar, percents, "%", status))
     sys.stdout.flush()
 
@@ -100,22 +98,23 @@ for j in nifty50:
     nifty500_data[ticker] = data
     n += 1
     # db.collection(ticker).document(curr).set(data)
+print()
 
 # Get Index quote
 quote = nse.get_index_quote("NIFTY 500")
-nifty500_data = {
+nifty500_quote = {
     "lastPrice": quote["lastPrice"],
     "change": quote["change"],
     "pChange": quote["pChange"],
     "date": curr,
 }
 # Update index quote in database
-db.collection("NIFTY500").document(curr).set(nifty500_data)
+db.collection("NIFTY500").document(curr).set(nifty500_quote)
 
 # Sort the data by pChange
 sorted_p = sorted(nifty500_data.items(), key=lambda x: x[1]["pChange"], reverse=True)
 content = "Today's Max Gainers\n"
-content += "NIFTY 500: " + str(nifty500_data["pChange"]) + "\n\n"
+content += "NIFTY 500: " + str(nifty500_quote["pChange"]) + "\n\n"
 for i in sorted_p[:20]:
     content += i[0] + ": " + str(i[1]["pChange"]) + "\n"
 
