@@ -101,9 +101,21 @@ for j in nifty50:
     n += 1
     # db.collection(ticker).document(curr).set(data)
 
+# Get Index quote
+quote = nse.get_index_quote("NIFTY 500")
+nifty500_data = {
+    "lastPrice": quote["lastPrice"],
+    "change": quote["change"],
+    "pChange": quote["pChange"],
+    "date": curr,
+}
+# Update index quote in database
+db.collection("NIFTY500").document(curr).set(nifty500_data)
+
 # Sort the data by pChange
 sorted_p = sorted(nifty500_data.items(), key=lambda x: x[1]["pChange"], reverse=True)
-content = "Today's Max Gainers\n\n"
+content = "Today's Max Gainers\n"
+content += "NIFTY 500: " + str(nifty500_data["pChange"]) + "\n\n"
 for i in sorted_p[:20]:
     content += i[0] + ": " + str(i[1]["pChange"]) + "\n"
 
@@ -111,17 +123,6 @@ for i in sorted_p[:20]:
 url = os.getenv("DISCORD_HOOK")
 myobj = {"content": content}
 x = requests.post(url, data=myobj)
-
-# Get Index quote
-quote = nse.get_index_quote("NIFTY 500")
-data = {
-    "lastPrice": quote["lastPrice"],
-    "change": quote["change"],
-    "pChange": quote["pChange"],
-    "date": curr,
-}
-# Update index quote in database
-db.collection("NIFTY500").document(curr).set(data)
 
 # Upload data to database
 print("Uploading data to database")
