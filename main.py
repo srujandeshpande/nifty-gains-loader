@@ -15,6 +15,19 @@ path = sys.argv[0][:-7]
 
 nse = Nse()
 
+
+total = 500
+def progress(count, total, status=''):
+    bar_len = 60
+    filled_len = int(round(bar_len * count / float(total)))
+
+    percents = round(100.0 * count / float(total), 1)
+    bar = '=' * filled_len + '-' * (bar_len - filled_len)
+
+    sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
+    sys.stdout.flush()
+
+
 # Read the holidays file
 with open(path + "holidays.txt") as f:
     holidays = f.readlines()
@@ -70,8 +83,11 @@ db.collection("meta").document("dates").set(data)
 nifty500_data = {}
 
 # Get Quote for each Ticker
+print("Downloading Quotes for each Ticker")
+n = 0
 for j in nifty50:
     ticker = j.strip()
+    progress(n, total, status=ticker)
     quote = nse.get_quote(ticker)
     data = {
         "open": float(quote["open"]),
@@ -80,6 +96,7 @@ for j in nifty50:
         "date": curr,
     }
     nifty500_data[ticker] = data
+    n+=1
     # db.collection(ticker).document(curr).set(data)
 
 # Sort the data by pChange
@@ -104,5 +121,10 @@ data = {
 # Update index quote in database
 db.collection("NIFTY500").document(curr).set(data)
 
+# Upload data to database
+print("Uploading data to database")
+n = 0
 for i in sorted_p:
+    progress(n, total, status=i[0])
     db.collection(i[0]).document(curr).set(i[1])
+    n+=1
