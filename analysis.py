@@ -35,15 +35,19 @@ cred = credentials.Certificate(path + "firestore-access.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-data_doc = db.collection("meta").document('dates').get().to_dict()
-dates = data_doc['dates']
+data_doc = db.collection("meta").document("dates").get().to_dict()
+dates = data_doc["dates"]
 
-nifty50_open = float(db.collection("NIFTY50").document(dates[0]).get().to_dict()['lastPrice'])
+nifty50_open = float(
+    db.collection("NIFTY50").document(dates[0]).get().to_dict()["lastPrice"]
+)
 nifty50_close = nifty50_open
-for i in range(1,len(dates)):
-    nifty50_close += float(db.collection("NIFTY50").document(dates[i]).get().to_dict()['change'])
+for i in range(1, len(dates)):
+    nifty50_close += float(
+        db.collection("NIFTY50").document(dates[i]).get().to_dict()["change"]
+    )
 
-nifty50_p = (nifty50_close-nifty50_open)/nifty50_open
+nifty50_p = (nifty50_close - nifty50_open) / nifty50_open
 
 print(nifty50_p, nifty50_close, nifty50_open)
 
@@ -55,9 +59,11 @@ stock_p = {}
 
 for i in nifty50:
     ticker = i.strip()
-    open_val = float(db.collection(ticker).document(dates[0]).get().to_dict()['open'])
-    close_val = float(db.collection(ticker).document(dates[-1]).get().to_dict()['close'])
-    p_val = (close_val-open_val)/open_val
+    open_val = float(db.collection(ticker).document(dates[0]).get().to_dict()["open"])
+    close_val = float(
+        db.collection(ticker).document(dates[-1]).get().to_dict()["close"]
+    )
+    p_val = (close_val - open_val) / open_val
     if p_val > nifty50_p:
         stock_p[ticker] = float(p_val)
 
@@ -80,7 +86,7 @@ print(sorted_p)
 # print(filtered_p)
 
 content = ""
-content += "Date Range: "+str(dates[0])+" to "+str(dates[-1])+" \n"
+content += "Date Range: " + str(dates[0]) + " to " + str(dates[-1]) + " \n"
 content += "NIFTY 50 " + str(nifty50_p) + "%\n\n"
 
 for i in sorted_p:

@@ -17,14 +17,16 @@ nse = Nse()
 
 
 total = 500
-def progress(count, total, status=''):
+
+
+def progress(count, total, status=""):
     bar_len = 60
     filled_len = int(round(bar_len * count / float(total)))
 
     percents = round(100.0 * count / float(total), 1)
-    bar = '=' * filled_len + '-' * (bar_len - filled_len)
+    bar = "=" * filled_len + "-" * (bar_len - filled_len)
 
-    sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
+    sys.stdout.write("[%s] %s%s ...%s\r" % (bar, percents, "%", status))
     sys.stdout.flush()
 
 
@@ -96,14 +98,14 @@ for j in nifty50:
         "date": curr,
     }
     nifty500_data[ticker] = data
-    n+=1
+    n += 1
     # db.collection(ticker).document(curr).set(data)
 
 # Sort the data by pChange
-sorted_p = sorted(nifty500_data.items(), key=lambda x: x[1]['pChange'], reverse=True)
+sorted_p = sorted(nifty500_data.items(), key=lambda x: x[1]["pChange"], reverse=True)
 content = "Today's Max Gainers\n\n"
 for i in sorted_p[:20]:
-    content += i[0] + ": " + str(i[1]['pChange']) + "\n"
+    content += i[0] + ": " + str(i[1]["pChange"]) + "\n"
 
 # Send Discord message
 url = os.getenv("DISCORD_HOOK")
@@ -127,4 +129,4 @@ n = 0
 for i in sorted_p:
     progress(n, total, status=i[0])
     db.collection(i[0]).document(curr).set(i[1])
-    n+=1
+    n += 1
