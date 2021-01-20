@@ -103,9 +103,9 @@ print()
 # Get Index quote
 quote = nse.get_index_quote("NIFTY 500")
 nifty500_quote = {
-    "lastPrice": quote["lastPrice"],
-    "change": quote["change"],
-    "pChange": quote["pChange"],
+    "lastPrice": float(quote["lastPrice"]) if quote["lastPrice"] else 0.0,
+    "change": float(quote["change"]) if quote["change"] else 0.0,
+    "pChange": float(quote["pChange"]) if quote["pChange"] else 0.0,
     "date": curr,
 }
 # Update index quote in database
