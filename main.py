@@ -90,9 +90,9 @@ for j in nifty50:
     progress(n, total, status=ticker)
     quote = nse.get_quote(ticker)
     data = {
-        "open": float(quote["open"]),
-        "close": float(quote["closePrice"]),
-        "pChange": float(quote["pChange"]),
+        "open": float(quote["open"]) ) if quote["open"] else 0.0,
+        "close": float(quote["closePrice"]) ) if quote["close"] else 0.0,
+        "pChange": float(quote["pChange"]) if quote["pChange"] else 0.0,
         "date": curr,
     }
     nifty500_data[ticker] = data
