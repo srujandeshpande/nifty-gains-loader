@@ -15,7 +15,7 @@ jobs:
   execute:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    environment: Daily Stock Check
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v2
@@ -23,7 +23,15 @@ jobs:
         with:
           python-version: 3.8
       - uses: Gr1N/setup-poetry@v4
-      - run: poetry --version
-      - run: poetry install
-      - run: ./secrets/decrypt_secret.sh
-      - run: poetry run python main.py
+      - name: Check if Poetry is correctly installed
+        run: poetry --version
+      - name: Install dependencies
+        run: poetry install
+      - name: Decrypt secret files
+        run: ./secrets/decrypt_secret.sh
+        env:
+          FIRESTORE_PASSPHRASE: ${{ secrets.FIRESTORE_PASSPHRASE }}
+      - name: Run the job
+        run: poetry run python main.py
+        env:
+          DISCORD_HOOK: ${{ secrets.DISCORD_HOOK }}
