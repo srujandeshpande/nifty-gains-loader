@@ -25,7 +25,5 @@ jobs:
       - uses: Gr1N/setup-poetry@v4
       - run: poetry --version
       - run: poetry install
+      - run: echo $FIRESTORE_ACCESS > firestore-access.json
       - run: poetry run python main.py
-        env:
-          DISCORD_HOOK: ${{ secrets.DISCORD_HOOK }}
-          ALPHAVANTAGE_KEY: ${{ secrets.ALPHAVANTAGE_KEY }}
