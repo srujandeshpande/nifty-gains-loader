@@ -26,4 +26,6 @@ jobs:
       - run: poetry --version
       - run: poetry install
       - run: ./secrets/decrypt_secret.sh
+        env:
+          FIRESTORE_PASSPHRASE: ${{ secrets.FIRESTORE_PASSPHRASE }}
       - run: poetry run python main.py
