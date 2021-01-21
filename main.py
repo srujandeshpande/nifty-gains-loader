@@ -90,8 +90,8 @@ for j in nifty50:
     progress(n, total, status=ticker)
     quote = nse.get_quote(ticker)
     data = {
-        "open": float(quote["open"]) ) if quote["open"] else 0.0,
-        "close": float(quote["closePrice"]) ) if quote["close"] else 0.0,
+        "open": float(quote["open"]) if quote["open"] else 0.0,
+        "close": float(quote["closePrice"]) if quote["closePrice"] else 0.0,
         "pChange": float(quote["pChange"]) if quote["pChange"] else 0.0,
         "date": curr,
     }
@@ -130,3 +130,4 @@ for i in sorted_p:
     progress(n, total, status=i[0])
     db.collection(i[0]).document(curr).set(i[1])
     n += 1
+print()
