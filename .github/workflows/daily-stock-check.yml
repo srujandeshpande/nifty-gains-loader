@@ -24,6 +24,7 @@ jobs:
           python-version: 3.8
       - uses: Gr1N/setup-poetry@v4
       - run: poetry --version
+      - run: poetry install
       - run: poetry run python main.py
         env:
           DISCORD_HOOK: ${{ secrets.DISCORD_HOOK }}
