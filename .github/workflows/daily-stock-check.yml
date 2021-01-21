@@ -25,5 +25,5 @@ jobs:
       - uses: Gr1N/setup-poetry@v4
       - run: poetry --version
       - run: poetry install
-      - run: echo $FIRESTORE_ACCESS > firestore-access.json
+      - run: ./secrets/decrypt_secret.sh
       - run: poetry run python main.py
