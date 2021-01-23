@@ -12,12 +12,12 @@ load_dotenv()
 
 path = sys.argv[0][:-11]
 
-with open(path + "holidays.txt") as f:
-    holidays = f.readlines()
+# with open(path + "holidays.txt") as f:
+#     holidays = f.readlines()
 
-ist = pytz.timezone("Asia/Calcutta")
-today = datetime.now(ist)
-curr = today.strftime("%Y-%m-%d")
+# ist = pytz.timezone("Asia/Calcutta")
+# today = datetime.now(ist)
+# curr = today.strftime("%Y-%m-%d")
 
 # # Checking if it is a holiday
 # for i in holidays:
@@ -39,12 +39,12 @@ data_doc = db.collection("meta").document("dates").get().to_dict()
 dates = data_doc["dates"]
 
 nifty50_open = float(
-    db.collection("NIFTY50").document(dates[0]).get().to_dict()["lastPrice"]
+    db.collection("NIFTY500").document(dates[0]).get().to_dict()["lastPrice"]
 )
 nifty50_close = nifty50_open
 for i in range(1, len(dates)):
     nifty50_close += float(
-        db.collection("NIFTY50").document(dates[i]).get().to_dict()["change"]
+        db.collection("NIFTY500").document(dates[i]).get().to_dict()["change"]
     )
 
 nifty50_p = (nifty50_close - nifty50_open) / nifty50_open
@@ -52,7 +52,7 @@ nifty50_p = (nifty50_close - nifty50_open) / nifty50_open
 print(nifty50_p, nifty50_close, nifty50_open)
 
 # Individual Quotes
-with open(path + "nifty50.txt") as f:
+with open(path + "data/nifty500.txt") as f:
     nifty50 = f.readlines()
 
 stock_p = {}
