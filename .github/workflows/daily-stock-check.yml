@@ -5,7 +5,7 @@ name: Daily Stock Check
 # Controls when the action will run. 
 on:
   schedule:
-    - cron: '30 10 * * 1-5'
+    - cron: '50 10 * * 1-5'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -23,7 +23,15 @@ jobs:
         with:
           python-version: 3.8
       - uses: Gr1N/setup-poetry@v4
-      - run: poetry --version
-      - run: poetry install
-      - run: ./secrets/decrypt_secret.sh
-      - run: poetry run python main.py
+      - name: Check if Poetry is correctly installed
+        run: poetry --version
+      - name: Install dependencies
+        run: poetry install
+      - name: Decrypt secret files
+        run: ./secrets/decrypt_secret.sh
+        env:
+          FIRESTORE_PASSPHRASE: ${{ secrets.FIRESTORE_PASSPHRASE }}
+      - name: Run the job
+        run: poetry run python main.py
+        env:
+          DISCORD_HOOK: ${{ secrets.DISCORD_HOOK }}
