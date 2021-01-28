@@ -21,14 +21,6 @@ db = firestore.client()
 data_doc = db.collection("meta").document("dates").get().to_dict()
 dates = data_doc["dates"]
 
-nifty50_open = float(
-    db.collection("NIFTY500").document(dates[0]).get().to_dict()["lastPrice"]
-)
-nifty50_close = nifty50_open
-for i in range(1, len(dates)):
-    nifty50_close += float(
-        db.collection("NIFTY500").document(dates[i]).get().to_dict()["change"]
-    )
 
 nifty50_p = (nifty50_close - nifty50_open) / nifty50_open
 
